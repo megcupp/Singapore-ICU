@@ -165,6 +165,9 @@ summary(icu.trun)
 #estimation of p-value from Z value requires an assumption that data follows a normal dist...
 
 # are these estimates reliable?
+## yes - the same signficiance value is optained when run in STATA with 
+## tpoisson LoS Year, 11(1) and tpoisson UCI_LoS Year, 11(1)
+
 
 #############################################################################################
 #
