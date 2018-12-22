@@ -258,8 +258,8 @@ table3a <- bind_rows(
 ) %>% 
   # remove the missing category in household income
   filter(!is.na(name)) %>% 
-  # Change 0s to "-"                                        ###what is the function to divisor 7 here -> changed to 5?
-  mutate(increase = (as.numeric(Year_2015) / as.numeric(Year_2010)) ** (1/7) - 1) %>% 
+  # Change 0s to "-"
+  mutate(increase = (as.numeric(Year_2015) / as.numeric(Year_2010)) ** (1/5) - 1) %>% 
   mutate_at(vars(Year_2010:Year_2015), .funs = function(x) paste0("$",round(as.numeric(x) / 10, digits = 0)/100)) %>% 
   mutate_at(vars(Year_2010:Year_2015), .funs = function(x){ if_else(x == "$NA", as.character(NA), x)})
 
