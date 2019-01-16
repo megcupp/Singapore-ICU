@@ -298,3 +298,49 @@ icu %>%
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave(file.path("length_of_stay_ICU.png"))
+
+
+#############################################################################################
+#
+#    Graph 4: Affluence and bill size (U-curve)
+#
+  
+OverallSpend <- icu %>%
+  filter(!is.na(Income.Cat)) %>% 
+  ggplot(aes(x=Income.Cat, y=Gross.Amount)) + stat_summary(fun.data=mean_cl_normal)  +
+  labs(y="Bill Size", x="", title="Overall Expenditure") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_cartesian(ylim = c(15000, 39000)) +
+  theme_minimal()
+
+ggsave(file.path("affluence_bill_size_ICU.png"))
+
+ICUSpend <- icu %>%
+  filter(!is.na(Income.Cat)) %>% 
+  ggplot(aes(x=Income.Cat, y=ICU.Gross.Amount)) + stat_summary(fun.data=mean_cl_normal)  +
+  labs(y="Bill Size", x="Income Category", title="Affluence and ICU Expenditure") +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  coord_cartesian(ylim = c(5000, 39000)) +
+  theme_minimal()
+
+ggsave(file.path("affluence_ICU_bill_size_ICU.png"))
+
+grid.arrange(OverallSpend, ICUSpend, nrow=1)
+
+icu$nonicu <- icu$Gross.Amount - icu$ICU.Gross.Amount
+
+nonICUSpend <- icu %>%
+  filter(!is.na(Income.Cat)) %>% 
+  ggplot(aes(x=Income.Cat, y=nonicu)) + stat_summary(fun.data=mean_cl_normal)  +
+  labs(y="", x="", title="Expenditure excluding ICU") +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  coord_cartesian(ylim = c(15000, 39000)) +
+  theme_minimal()
+
+ggsave(file.path("affluence_bill_size_nonICU.png"))
+
+grid.exp <- grid.arrange(OverallSpend, nonICUSpend, nrow=1,
+                         top = textGrob("Affluence and Hospital Expenditure",gp=gpar(fontsize=20)),
+                         bottom = textGrob("Income Category",gp=gpar(fontsize=12)))
+
+ggsave(file.path("affluence_grid.png"))       
